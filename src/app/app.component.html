@@ -1,0 +1,40 @@
+
+<h3>Add user</h3>
+<form (submit)="onSubmit()">
+ <label>
+    Username:
+    <br />
+    <input autocomplete="off" name="username" [(ngModel)]="username"/>
+  </label>
+   <br>
+   <label>
+    Email:
+    <br />
+    <input autocomplete="off" name="email" [(ngModel)]="email"/>
+  </label>
+ <br>
+  <label>
+    Age:
+    <br />
+    <input autocomplete="off" name="age" [(ngModel)]="age"/>
+  </label>
+  <br>
+   <label>
+    Gender:
+    <br />
+    <input autocomplete="off" name="gender" [(ngModel)]="gender"/>
+  </label> 
+
+  <button type="submit">Add</button>
+</form> 
+
+<h3>Here list of user</h3>
+<ul>
+  <li *ngFor="let user of users$ | async">
+    {{ user.username }}  , {{ user.email }} , {{ user.age }}
+  </li>
+</ul> 
+
+
+<h3>Reset Database</h3>
+<button (click)="resetDatabase()">Reset Database</button>
