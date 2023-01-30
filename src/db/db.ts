@@ -1,57 +1,38 @@
 import Dexie, { Table } from 'dexie';
 
-export interface User {
+export interface CompanyWorker {
   id?: number;
-  username: string;
-  email: string;
-  age: number;
-  //gender: string;
+  name: string;
+  surname: string;
+  //age: number;
 }
 
-
 export class AppDB extends Dexie {
-  users!: Table<User, number>;
-
+  workers!: Table<CompanyWorker, number>;
+  oldversion: number = 1;
+  newVersion: number = 1;
 
   constructor(name: string) {
     super(name);
-    this.version(4).stores({
-      users: '++id, username,email, age'
+    this.version(1).stores({
+      workers: '++id, name'
+    });
+     
+    this.newVersion = this.verno;
+    if(this.oldversion != this.newVersion ){
+      this.workers.clear();
+      this.oldversion = this.newVersion;
+    }
+
+    this.version(2).stores({
+      workers: '++id, name, surname'
     });
 
-    //this.users.clear();
-    //this.on('populate', () => this.populate());
-
-    console.log("Version: " + this.verno);
-
+    
   }
-
-
-
-  // async populate() {
-  //   await db.users.bulkAdd([
-  //     {
-  //       username: 'John'
-  //     },
-  //     {
-  //       username: 'Deneme1'
-  //     },
-  //     {
-  //       username: 'User7'
-  //     }
-  //   ]);
-
-  // }
-
-  async resetDatabase() {
-  await db.transaction('rw', 'users', () => {
-    this.users.clear();
-    //this.populate();
-  });
 }
 
 
-}
-
-
-export const db = new AppDB('UserDB');
+//export const dbComp1 = new AppDB('Company1');
+export const dbComp2 = new AppDB('Company2');
+//export const dbComp4 = new AppDB(`db-${}`);

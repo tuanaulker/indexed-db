@@ -1,40 +1,41 @@
+<h1>Branches of the burger company in Antalya</h1>
 
-<h3>Add user</h3>
-<form (submit)="onSubmit()">
- <label>
-    Username:
-    <br />
-    <input autocomplete="off" name="username" [(ngModel)]="username"/>
-  </label>
-   <br>
-   <label>
-    Email:
-    <br />
-    <input autocomplete="off" name="email" [(ngModel)]="email"/>
-  </label>
- <br>
+<form (submit)="onSubmitNames()">
   <label>
-    Age:
+    Add Branch Names :
     <br />
-    <input autocomplete="off" name="age" [(ngModel)]="age"/>
+    <input autocomplete="off" name="nameBranch" [(ngModel)]="nameBranch" />
   </label>
-  <br>
-   <label>
-    Gender:
-    <br />
-    <input autocomplete="off" name="gender" [(ngModel)]="gender"/>
-  </label> 
-
-  <button type="submit">Add</button>
-</form> 
-
-<h3>Here list of user</h3>
-<ul>
-  <li *ngFor="let user of users$ | async">
-    {{ user.username }}  , {{ user.email }} , {{ user.age }}
-  </li>
-</ul> 
+  &nbsp;
+  <button type="submit">Add branch</button>
+</form>
 
 
-<h3>Reset Database</h3>
-<button (click)="resetDatabase()">Reset Database</button>
+<h3>Click for see your company branches</h3>
+<button (click)="revenueCenter()">Revenue Center</button>
+<br>
+<br>
+
+<div *ngIf="showRevenue == true">
+  <form>
+  
+    <div *ngFor="let c of informationDb">
+      <input type="checkbox" value={{c.dbName}} [checked]="false" [disabled]="checkboxDis" (change)="checkCheckBoxvalue($event)">
+      <label for="name"> {{ c.realName }}</label><br>
+    </div>
+  </form>
+  
+</div>
+<br>
+
+<h4 *ngIf="selectedDb != ''" > Current selected Database {{ selectedrealName}} , {{selectedDb }}</h4>
+
+<button (click)="createNewSelected()">Create New Database for selected</button>
+<br><br>
+<button (click)="deleteSelected()">Delete seletected database </button>
+<br><br>
+<button (click)="deleteAll()">Delete all Databases</button>
+
+
+ 
+ 
