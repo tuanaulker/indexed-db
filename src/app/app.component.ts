@@ -4,7 +4,6 @@ import { Guid } from 'guid-typescript';
 import { AppDB, Branch, BranchDB } from 'src/db/db';
 export const dbComp1 = new AppDB('Company1');
 
-
 export interface infoDB {
   realName: string;
   dbName: string;
@@ -43,16 +42,32 @@ export class AppComponent implements OnInit {
   }
 
   addBranchToMaster() {
-    var tempBranch: Branch = {
-      name: this.nameBranch,
-      selected: false
+    if(this.nameBranch != ""){
+      var tempBranch: Branch = {
+        name: this.nameBranch,
+        selected: false
+      }
+      this.masterDb.branches.add(tempBranch);
+      this.nameBranch = '';
+      this.masterBranches$ = liveQuery(() => this.masterDb.branches.toArray());
     }
-    this.masterDb.branches.add(tempBranch);
-    this.nameBranch = '';
-    this.masterBranches$ = liveQuery(() => this.masterDb.branches.toArray());
   }
 
   createDbforSelected(selectedName: string) {
+    //last db is removed
+    if(this.informationDb.length != 0){
+      Dexie.getDatabaseNames()
+      .then(names => {
+        names.forEach(name => {
+          if(name != 'master'){
+            const db = new Dexie(name);
+            db.delete().catch(() => { });
+            this.informationDb.pop();
+          }    
+        })
+      });
+    }
+    //create new one
     var tempinfoDb: infoDB = {
       realName: selectedName,
       dbName: ''
@@ -85,7 +100,7 @@ export class AppComponent implements OnInit {
     this.id = Guid.create();
     this.tempDb = new AppDB(`${tempInfo.realName}db-${this.id}`)
     tempInfo.dbName = this.tempDb.name;
-    this.tempDb.personnel.add({ name: 'ayse', surname: 'celik' });
+    this.tempDb.personnel.add({ name: 'ayse', surname: 'celik' , userType: 1});
     this.informationDb.push(tempInfo);
   }
 
@@ -94,6 +109,9 @@ export class AppComponent implements OnInit {
       Dexie.getDatabaseNames()
         .then(names => {
           names.forEach(name => {
+            if(name != "master"){
+              const db = new Dexie(name);
+            }
             var tempinfoDb: infoDB = {
               realName: name.split("db", 1).toString(),
               /*yapıyı biliyoruz önce şube ismi daha sonra db geliyor, 
@@ -125,7 +143,6 @@ export class AppComponent implements OnInit {
         })
       });
     }
-    
   }
 
   createNewSelected() {
@@ -169,11 +186,17 @@ export class AppComponent implements OnInit {
   }
 
   revenueCenter() {
-    this.clear();
-    console.log(this.selectedBranchfromMaster);
+    //this.clear();
+    //console.log(this.selectedBranchfromMaster);
     this.checkboxDis = false;
     this.selectedDb = '';
     this.showRevenue = true;
+    this.testNewColumn();
+  }
+
+  testNewColumn(){
+    const db = new AppDB(this.informationDb[0].dbName);
+    db.table("personnel").add({ name: 'new', surname: 'user' , userType: 2});
   }
 
   /*

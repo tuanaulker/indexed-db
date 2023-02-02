@@ -17,7 +17,7 @@
 <br>
 <br>
 
-<div *ngIf="showRevenue == true">
+<div *ngIf="showRevenue == true || informationDb.length != 0">
   <form>
     <!-- <div *ngFor="let c of informationDb">  Her name eklendiğinde yeni bir database oluşurken kullanıyorduk
       <input type="checkbox" value={{c.dbName}} [checked]="false" [disabled]="checkboxDis" (change)="checkCheckBoxvalue($event)">
@@ -51,7 +51,8 @@
 <button (click)="deleteSelected()">Delete seletected database </button>
 <br><br>
 <button (click)="clearBranchesInMaster()">Delete all branches in master</button>
-
+<br><br>
+<button (click)="testNewColumn()">Test for the migration after the new column</button>
 
 
  

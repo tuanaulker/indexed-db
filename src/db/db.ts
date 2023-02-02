@@ -10,7 +10,7 @@ export interface CompanyWorker {
   id?: number;
   name: string;
   surname: string;
-  //age: number;
+  userType: number
 }
 export class BranchDB extends Dexie{
   branches: Table<Branch, number>
@@ -39,8 +39,13 @@ export class AppDB extends Dexie {
       this.oldversion = this.newVersion;
     }
 
-    this.version(2).stores({
-      personnel: '++id, name, surname'
+    // this.version(2).stores({
+    //   personnel: '++id, name, surname'
+    // }); 
+
+    
+    this.version(3).stores({
+      personnel: '++id, name, surname, userType'
     }); 
   }
 }
